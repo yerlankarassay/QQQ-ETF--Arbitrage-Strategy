@@ -1,7 +1,6 @@
 # ETF Arbitrage Backtesting System
 
-A Python backtesting framework for a statistical arbitrage strategy between a synthetic ETF and QQQ, inspired by the Capula Investment Management quant assessment.
-
+A Python backtesting framework for a statistical arbitrage strategy between a synthetic ETF and QQQ.
 ## Strategy
 
 The core idea is that QQQ should closely track a synthetic ETF constructed from its own top holdings. When they diverge, a mean-reversion trade is placed:
@@ -23,9 +22,7 @@ The core idea is that QQQ should closely track a synthetic ETF constructed from 
 
 **Train/test split** (70/30) produced consistent Sharpe ratios of 0.71 vs 0.65, suggesting the strategy is not overfit.
 
-## Key Learnings from Capula Assessment
-
-The strategy originated from a Capula quant assessment where the same logic was applied to simulated FAANG prices. Translating it to real market data required several iterations:
+## Key Learnings during writing the code
 
 **Problem 1 — Spread was $600–$1000** because raw stock prices (AMZN ~$1,900, GOOGL ~$1,300) were being averaged directly against a rebased $100 ETF. Fix: rebase all stocks to 100 at t₀ before computing the synthetic.
 
@@ -67,10 +64,10 @@ All parameters are in the `CONFIG` dictionary at the top of the file:
 
 ```python
 CONFIG = {
-    "threshold_mult":   2.5,   # higher = fewer, higher-conviction trades
+    "threshold_mult":   2,   # higher = fewer, higher-conviction trades
     "threshold_window": 20,    # rolling window for volatility estimation
-    "commission_pct":   0.001, # 0.1% per trade
-    "dollar_notional":  5000,  # fixed $ exposure per trade
+    "commission_pct":   0.005, # 0.5% per trade to test in harsh conditions (it is usually around 01.%)
+    "dollar_notional":  10000,  # fixed $ exposure per trade
     "min_hold_days":    3,     # minimum days before exit allowed
 }
 ```
